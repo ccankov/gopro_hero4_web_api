@@ -1,0 +1,11 @@
+{
+  "name": "gopro_remote_server",
+  "version": "0.1.0",
+  "description": "A Node.js web api for remotely controlling a GoPro Hero 4 camera.",
+  "main": "index.js",
+  "scripts": {
+    "test": "echo \"Error: no test specified\" && exit 1"
+  },
+  "author": "Fotoplr, Inc",
+  "license": "ISC"
+}
