@@ -2,27 +2,27 @@ var GoPro = require('goproh4');
 
 var cam = new GoPro.Camera();
 
-function setPhotoMode() {
-  cam.ready(function() {
-    cam.mode(
-      GoPro.Settings.Modes.Photo,
-      GoPro.Settings.Submodes.Photo.Single
-    ).then(function() {
-      return cam.set(
-        GoPro.Settings.PHOTO_RESOLUTION,
-        GoPro.Settings.PhotoResolution.R7MPMedium
-      );
-    }).then(function() {
-      console.log("Configuration complete");
-    });
-  });
-}
-
 function takePhoto() {
-  cam.start().then(function() {
-    console.log('Photo taken');
+  // Set camera mode
+  cam.mode(GoPro.Settings.Modes.Photo, GoPro.Settings.Submodes.Photo.Single)
+
+  // Set photo resolution
+  .then(function () {
+    return cam.set(
+      GoPro.Settings.PHOTO_RESOLUTION,
+      GoPro.Settings.PhotoResolution.R7MPMedium
+    );
+  })
+
+  // Take picture
+  .then(function () {
+    return cam.start();
+  })
+
+  // Done
+  .then(function () {
+    console.log('[picture taken]');
   });
-  return;
 }
 
 function getLastPhoto() {
@@ -40,7 +40,6 @@ function getLastPhoto() {
 }
 
 module.exports = {
-  setPhotoMode: setPhotoMode,
   takePhoto: takePhoto,
   getLastPhoto: getLastPhoto
 };
