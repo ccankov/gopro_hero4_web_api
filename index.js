@@ -4,18 +4,15 @@ var cam = new GoPro.Camera();
 
 function setPhotoMode() {
   cam.ready(function() {
-    var promises = [];
-
-    var modePromise = cam.mode(
+    cam.mode(
       GoPro.Settings.Modes.Photo,
       GoPro.Settings.Submodes.Photo.Single
-    );
-    var settingPromise = cam.set(
-      GoPro.Settings.PHOTO_RESOLUTION,
-      GoPro.Settings.PhotoResolution.R7MPMedium
-    );
-
-    Promise.all(promises).then(function() {
+    ).then(function() {
+      return cam.set(
+        GoPro.Settings.PHOTO_RESOLUTION,
+        GoPro.Settings.PhotoResolution.R7MPMedium
+      );
+    }).then(function() {
       console.log("Configuration complete");
     });
   });
