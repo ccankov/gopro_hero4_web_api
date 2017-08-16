@@ -35,3 +35,9 @@ function getLastPhoto() {
     });
   });
 }
+
+module.exports = {
+  setPhotoMode: setPhotoMode,
+  takePhoto: takePhoto,
+  getLastPhoto: getLastPhoto
+};
