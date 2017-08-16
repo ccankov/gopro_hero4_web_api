@@ -1,45 +1,64 @@
-var GoPro = require('goproh4');
+import GoPro from 'goproh4';
 
 var cam = new GoPro.Camera();
 
+// Take a new photo
 function takePhoto() {
-  // Set camera mode
-  cam.mode(GoPro.Settings.Modes.Photo, GoPro.Settings.Submodes.Photo.Single)
+  return new Promise((resolve, reject) => {
+    // Set camera mode
+    cam.mode(GoPro.Settings.Modes.Photo, GoPro.Settings.Submodes.Photo.Single)
 
-  // Set photo resolution
-  .then(function () {
-    return cam.set(
-      GoPro.Settings.PHOTO_RESOLUTION,
-      GoPro.Settings.PhotoResolution.R7MPMedium
-    );
-  })
+    // Set photo resolution
+    .then(function () {
+      return cam.set(
+        GoPro.Settings.PHOTO_RESOLUTION,
+        GoPro.Settings.PhotoResolution.R12MPWide
+      );
+    })
 
-  // Take picture
-  .then(function () {
-    return cam.start();
-  })
+    // Take picture
+    .then(function () {
+      return cam.start();
+    })
 
-  // Done
-  .then(function () {
-    console.log('[picture taken]');
+    // Done
+    .then(() => resolve())
+
+    // Catch errors
+    .catch(error => reject(error));
   });
 }
 
+// Get the file for the most recently taken photo
 function getLastPhoto() {
-  cam.listMedia().then(function (result) {
+  return new Promise((resolve, reject) => {
+    cam.listMedia().then(function (result) {
 
-    var lastDirectory = result.media[result.media.length - 1];
-    var lastFile = lastDirectory.fs[lastDirectory.fs.length - 1];
+      var lastDirectory = result.media[result.media.length - 1];
+      var lastFile = lastDirectory.fs[lastDirectory.fs.length - 1];
 
-    cam.getMedia(lastDirectory.d, lastFile.n, lastFile.n).then(
-      function(filename) {
-        console.log(filename, '[saved]');
-      }
-    );
+      cam.getMedia(lastDirectory.d, lastFile.n, lastFile.n).then((filename) => {
+        resolve(filename);
+      }).catch(error => {
+        reject(error);
+      });
+    }).catch(error => {
+      reject(error);
+    });
   });
 }
 
-module.exports = {
-  takePhoto: takePhoto,
-  getLastPhoto: getLastPhoto
+// Wipe all media from the camera storage
+function deleteAllMedia() {
+  return new Promise((resolve, reject) => {
+    cam.deleteAll().then(function () {
+      resolve();
+    }).catch(error => reject(error));
+  });
+}
+
+export default {
+  takePhoto,
+  getLastPhoto,
+  deleteAllMedia
 };
