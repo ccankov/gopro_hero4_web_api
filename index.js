@@ -15,12 +15,16 @@ function setPhotoMode() {
       GoPro.Settings.PhotoResolution.R7MPMedium
     );
 
-    Promise.all(promises).then(() => console.log("Configuration complete"));
+    Promise.all(promises).then(function() {
+      console.log("Configuration complete");
+    });
   });
 }
 
 function takePhoto() {
-  cam.start().then(() => console.log('Photo taken'));
+  cam.start().then(function() {
+    console.log('Photo taken');
+  });
   return;
 }
 
@@ -30,9 +34,11 @@ function getLastPhoto() {
     var lastDirectory = result.media[result.media.length - 1];
     var lastFile = lastDirectory.fs[lastDirectory.fs.length - 1];
 
-    cam.getMedia(lastDirectory.d, lastFile.n, lastFile.n).then((filename) => {
+    cam.getMedia(lastDirectory.d, lastFile.n, lastFile.n).then(
+      function(filename) {
         console.log(filename, '[saved]');
-    });
+      }
+    );
   });
 }
 
