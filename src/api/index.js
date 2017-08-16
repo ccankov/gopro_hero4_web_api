@@ -10,7 +10,15 @@ export default ({ config, db }) => {
 	// mount the facets resource
 	api.use('/facets', facets({ config, db }));
 
-	// perhaps expose some API metadata at the root
+	api.get('/status', (req, res) => {
+		// get status from camera
+		cameraApi.getStatus().then((status) => {
+			// respond with status
+			res.json(status);
+		}).catch(error => res.json(error));
+	});
+
+	// capture photo at root
 	api.get('/', (req, res) => {
 		// take photo
 		cameraApi.takePhoto().then(() => {

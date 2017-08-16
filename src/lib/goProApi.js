@@ -2,6 +2,21 @@ import GoPro from 'goproh4';
 
 var cam = new GoPro.Camera();
 
+// Get status
+function getStatus() {
+  return new Promise((resolve, reject) => {
+    cam = new GoPro.Camera();
+
+    // if cam is available, resolve the promise
+    cam.ready().then(() => {
+      resolve(cam);
+    });
+
+    // if cam is not available within 2 seconds, reject the promise
+    setTimeout(() => reject(cam), 2000)
+  });
+}
+
 // Take a new photo
 function takePhoto() {
   return new Promise((resolve, reject) => {
@@ -58,6 +73,7 @@ function deleteAllMedia() {
 }
 
 export default {
+  getStatus,
   takePhoto,
   getLastPhoto,
   deleteAllMedia
