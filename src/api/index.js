@@ -1,6 +1,7 @@
 import { Router } from 'express';
 import path from 'path';
 import cameraApi from '../lib/goProApi';
+import fs from 'fs';
 import facets from './facets';
 
 export default ({ config, db }) => {
@@ -21,6 +22,11 @@ export default ({ config, db }) => {
 			// delete camera media
 			cameraApi.deleteAllMedia().then(() => {
 				let rootPath = path.dirname(require.main.filename) + '/../';
+
+				// delete file after it is sent
+				res.on('finish', () => {
+					fs.unlink(`${rootPath}${filename}`);
+				});
 
 				// respond with latest photo file
 				res.sendFile(`./${filename}`, {
