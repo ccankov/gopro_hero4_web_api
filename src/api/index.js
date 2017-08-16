@@ -1,5 +1,5 @@
-import { version } from '../../package.json';
 import { Router } from 'express';
+import path from 'path';
 import cameraApi from '../lib/goProApi';
 import facets from './facets';
 
@@ -20,8 +20,12 @@ export default ({ config, db }) => {
 
 			// delete camera media
 			cameraApi.deleteAllMedia().then(() => {
-				// respond with version and filename
-				res.json({ version, filename });
+				let rootPath = path.dirname(require.main.filename) + '/../';
+
+				// respond with latest photo file
+				res.sendFile(`./${filename}`, {
+					root: rootPath
+				});
 			});
 		});
 	});
