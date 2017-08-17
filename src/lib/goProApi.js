@@ -8,7 +8,7 @@ function getStatus() {
     cam = new GoPro.Camera();
 
     // if cam is available, resolve the promise
-    cam.ready().then(() => {
+    cam.ready(() => {
       resolve(cam);
     });
 
