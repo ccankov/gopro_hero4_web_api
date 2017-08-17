@@ -47,7 +47,7 @@ function takePhoto() {
 // Get the file for the most recently taken photo
 function getLastPhoto() {
   return new Promise((resolve, reject) => {
-    cam.listMedia((result) => {
+    cam.listMedia().then(function (result) {
 
       var lastDirectory = result.media[result.media.length - 1];
       var lastFile = lastDirectory.fs[lastDirectory.fs.length - 1];
@@ -66,10 +66,9 @@ function getLastPhoto() {
 // Wipe all media from the camera storage
 function deleteAllMedia() {
   return new Promise((resolve, reject) => {
-    // Delete all media files
-    cam.deleteAll(() => resolve())
-    // Catch errors
-    .catch(error => reject(error));
+    cam.deleteAll().then(function () {
+      resolve();
+    }).catch(error => reject(error));
   });
 }
 
